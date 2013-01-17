@@ -11,6 +11,7 @@
 
 namespace FOS\Rest\Util;
 
+use Symfony\Component\HttpFoundation\AcceptHeader;
 use Symfony\Component\HttpFoundation\Request;
 
 class FormatNegotiator implements FormatNegotiatorInterface
@@ -28,7 +29,7 @@ class FormatNegotiator implements FormatNegotiatorInterface
      */
     public function getBestFormat(Request $request, array $priorities, $preferExtension = false)
     {
-        $mimetypes = $request->splitHttpAcceptHeader($request->headers->get('Accept'));
+        $mimetypes = array_keys(AcceptHeader::fromString($request->headers->get('Accept'))->all());
 
         $extension = $request->get('_format');
         if (null !== $extension && $request->getMimeType($extension)) {
